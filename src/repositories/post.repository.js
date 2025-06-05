@@ -1,5 +1,4 @@
 import Post from '../models/post.model.js';
-import PostController from "../controllers/post.controller.js";
 
 class PostRepository {
     async createPost(postData) {

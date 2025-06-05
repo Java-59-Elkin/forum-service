@@ -6,9 +6,20 @@ class PostService {
     }
 
     async getPostById(id) {
-        const post = await postRepository.findPostById(id);
-        if (!post) {
-            throw new Error(`Post with id ${id} not found`);
+        try {
+            const post = await postRepository.findPostById(id);
+            if (!post) {
+                const err = new Error(`Post with id ${id} not found`);
+                err.status = 404;
+                throw err;
+            }
+            return post;
+        } catch (err) {
+            if (err.name === 'CastError' && err.kind === 'ObjectId') {
+                err.status = 404;
+                err.message = `Invalid post id: ${id}`;
+            }
+            throw err;
         }
     }
 
