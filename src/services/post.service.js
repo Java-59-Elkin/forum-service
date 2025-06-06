@@ -6,49 +6,60 @@ class PostService {
     }
 
     async getPostById(id) {
-        try {
-            const post = await postRepository.findPostById(id);
-            if (!post) {
-                const err = new Error(`Post with id ${id} not found`);
-                err.status = 404;
-                throw err;
-            }
-            return post;
-        } catch (err) {
-            if (err.name === 'CastError' && err.kind === 'ObjectId') {
-                err.status = 404;
-                err.message = `Invalid post id: ${id}`;
-            }
-            throw err;
+        const post = await postRepository.findPostById(id);
+        if (!post) {
+            throw new Error(`Post with id ${id} not found`);
         }
+        return post;
     }
 
     async addLike(id){
-        // TODO like post
+        const post = await postRepository.addLike(id);
+        if (!post) {
+            throw new Error(`Post with id ${id} not found`);
+        }
+        return post;
     }
 
-    async findPostByAuthor(author) {
-        // TODO find post by author
+    async getPostByAuthor(author) {
+        return await postRepository.findPostsByAuthor(author);
     }
 
-    async addComment(id, commentator, message) {
-        // TODO add comment to post
+    async addComment(id, commenter, message) {
+        // FIXME remove _id from comment and fix dateCreated format
+        const comment = {user: commenter, message};
+        const post = await postRepository.addComment(id, comment);
+        if (!post) {
+            throw new Error(`Post with id ${id} not found`);
+        }
+        return post;
     }
 
     async deletePost(id) {
-        // TODO delete post
+        const post = await postRepository.deletePost(id);
+        if (!post) {
+            throw new Error(`Post with id ${id} not found`);
+        }
     }
 
-    async findPostsByTags(tags) {
-        // TODO find posts by tags
+    async getPostsByTags(tagsString) {
+        const tags = tagsString.split(',').map(tag => tag.trim().toLowerCase());
+        return await postRepository.findPostsByTags(tags);
     }
 
-    async getPostsByPeriod(dateFtor, dateTo){
-        // TODO find posts by period
+    async getPostsByPeriod(dateFrom, dateTo){
+        return await postRepository.findPostsByPeriod(new Date(dateFrom), new Date(dateTo));
     }
 
     async updatePost(id, data) {
-        // TODO update post title, tags, content
+        const post = await postRepository.findPostById(id);
+        if(!post) {
+            throw new Error(`Post with id ${id} not found`);
+        }
+        if(data.tags) {
+            data.tags.push(...post.tags);
+        }
+        return await postRepository.updatePost(id, post);
     }
 }
 
