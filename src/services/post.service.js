@@ -26,7 +26,6 @@ class PostService {
     }
 
     async addComment(id, commenter, message) {
-        // FIXME remove _id from comment and fix dateCreated format
         const comment = {user: commenter, message};
         const post = await postRepository.addComment(id, comment);
         if (!post) {
@@ -43,7 +42,12 @@ class PostService {
     }
 
     async getPostsByTags(tagsString) {
-        const tags = tagsString.split(',').map(tag => tag.trim().toLowerCase());
+        let tags;
+        if (Array.isArray(tagsString)) {
+            tags = tagsString.flatMap(val => val.split(',')).map(tag => tag.trim().toLowerCase());
+        } else {
+            tags = tagsString.split(',').map(tag => tag.trim().toLowerCase());
+        }
         return await postRepository.findPostsByTags(tags);
     }
 

@@ -17,6 +17,14 @@ const commentSchema = new mongoose.Schema({
         type: Number,
         default: 0,
     }
-}, {_id: false});
+}, {
+    _id: false,
+    toJSON: {
+        transform(doc, ret) {
+            ret.dateCreated = new Date(ret.dateCreated).toISOString().split('.')[0];
+        }
+    }
+});
+
 
 export default commentSchema;
