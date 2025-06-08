@@ -26,6 +26,7 @@ const accountSchema = new mongoose.Schema({
     toJSON: {
         transform(doc, ret) {
             delete ret._id;
+            delete ret.password;
         }
     }
 })

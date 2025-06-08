@@ -10,20 +10,20 @@ class AccountService {
         // TODO
     }
 
-    async deleteUser(login, id) {
-        // TODO
+    async deleteUser(login) {
+        return await accountRepository.deleteUser(login);
     }
 
     async updateUser(login, data) {
-        // TODO
+        return await accountRepository.updateUser(login, data);
     }
 
-    async addRole(login, data) {
-        // TODO
+    async addRole(login, role) {
+        return await accountRepository.addRole(login, role);
     }
 
-    async deleteRole(login, id) {
-        // TODO
+    async deleteRole(login, role) {
+        return await accountRepository.deleteRole(login, role);
     }
 
     async changePassword(login, data) {
@@ -31,7 +31,7 @@ class AccountService {
     }
 
     async getUsers(login) {
-        // TODO
+        return await accountRepository.getUser(login);
     }
 }
 
