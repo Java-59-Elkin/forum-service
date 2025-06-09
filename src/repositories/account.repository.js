@@ -2,10 +2,14 @@ import Account from '../models/account.model.js';
 
 
 class AccountRepository {
-    // TODO check that there is no such login in DB
     async registerUser(userData) {
-        const user = new Account(userData);
-        return user.save();
+        const isExist = await Account.findOne({login: userData.login});
+        if (!isExist) {
+            const user = new Account(userData);
+            return user.save();
+        }
+        return null;
+
     }
 
     // async loginUser(userData) {}

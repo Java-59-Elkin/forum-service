@@ -3,7 +3,11 @@ import accountRepository from "../repositories/account.repository.js";
 
 class AccountService {
     async registerUser(data) {
-            return await accountRepository.registerUser({ ...data})
+        const user = await accountRepository.registerUser({ ...data});
+        if(!user) {
+            throw new Error("Conflict");
+        }
+        return user;
     }
 
     async getLogin(name, email, password) {
